@@ -4,9 +4,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 
-class PageDeclaration extends StatelessWidget {
+class PageDeclaration extends StatefulWidget {
   const PageDeclaration({Key? key}) : super(key: key);
 
+  @override
+  State<PageDeclaration> createState() => _PageDeclarationState();
+}
+
+class _PageDeclarationState extends State<PageDeclaration> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
