@@ -11,15 +11,50 @@ class PageDeclaration extends StatefulWidget {
   State<PageDeclaration> createState() => _PageDeclarationState();
 }
 
-class _PageDeclarationState extends State<PageDeclaration> {
+class _PageDeclarationState extends State<PageDeclaration>
+    with TickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(
-        itemCount: 4,
-        itemBuilder: (BuildContext context, int index) {
-          return CardDeclaration();
-        },
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        toolbarHeight: 0,
+        bottom: TabBar(
+          // indicatorSize: ,
+          controller: _tabController,
+          automaticIndicatorColorAdjustment: true,
+          isScrollable: true,
+          tabs: [
+            Tab(
+              // icon: Icon(Icons.directions_car),
+              text: "Fiches de traçabilité",
+            ),
+            Tab(
+              // icon: Icon(Icons.fire_truck_rounded),
+              text: "Déclarations trimestrielles",
+            ),
+          ],
+        ),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: [
+          ListView.builder(
+            itemCount: 4,
+            itemBuilder: (BuildContext context, int index) {
+              return CardDeclaration();
+            },
+          ),
+          Icon(Icons.directions_transit),
+        ],
       ),
       floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: ExpandableFab(
