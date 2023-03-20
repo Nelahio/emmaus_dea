@@ -5,19 +5,26 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 
-class PageDeclaration extends StatelessWidget {
+class PageDeclaration extends StatefulWidget {
   const PageDeclaration({Key? key}) : super(key: key);
+
+  @override
+  State<PageDeclaration> createState() => _PageDeclarationState();
+}
+
+class _PageDeclarationState extends State<PageDeclaration>
+    with TickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-<<<<<<< Updated upstream
-      body: ListView.builder(
-        itemCount: 4,
-        itemBuilder: (BuildContext context, int index) {
-          return CardDeclaration();
-        },
-=======
       appBar: AppBar(
         backgroundColor: Colors.black,
         toolbarHeight: 0,
@@ -56,7 +63,6 @@ class PageDeclaration extends StatelessWidget {
             },
           ),
         ],
->>>>>>> Stashed changes
       ),
       floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: ExpandableFab(
