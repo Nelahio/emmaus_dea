@@ -62,6 +62,7 @@ class _PageDeclarationState extends State<PageDeclaration>
               return CardDeclaration();
             },
           ),
+          Icon(Icons.directions_transit),
         ],
       ),
       floatingActionButtonLocation: ExpandableFab.location,
