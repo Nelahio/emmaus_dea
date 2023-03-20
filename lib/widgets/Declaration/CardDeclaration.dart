@@ -25,10 +25,10 @@ class _CardDeclarationState extends State<CardDeclaration> {
             height: 150,
             decoration: BoxDecoration(
               color: Colors.blue,
-              // image: DecorationImage(
-              //   // image: AssetImage("images/${widget.image}"),
-              //   fit: BoxFit.cover,
-              // ),
+              image: DecorationImage(
+                image: AssetImage("assets/logo_international.png"),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           ListTile(

@@ -1,5 +1,6 @@
 import 'package:emmaus_dea/class/colors_app.dart';
 import 'package:emmaus_dea/widgets/Declaration/CardDeclaration.dart';
+import 'package:emmaus_dea/widgets/Declaration/CardFiche.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
@@ -10,11 +11,52 @@ class PageDeclaration extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+<<<<<<< Updated upstream
       body: ListView.builder(
         itemCount: 4,
         itemBuilder: (BuildContext context, int index) {
           return CardDeclaration();
         },
+=======
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        toolbarHeight: 0,
+        bottom: TabBar(
+          // indicatorSize: ,
+          controller: _tabController,
+          automaticIndicatorColorAdjustment: true,
+          isScrollable: true,
+          tabs: [
+            Tab(
+              // icon: Icon(Icons.directions_car),
+              text: "Fiches de traçabilité",
+            ),
+            Tab(
+              // icon: Icon(Icons.fire_truck_rounded),
+              text: "Déclarations trimestrielles",
+            ),
+          ],
+        ),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: [
+          ListView.builder(
+            itemCount: 15,
+            itemBuilder: (BuildContext context, int index) {
+              return CardFiche(
+                provenance: "Collecte à domicile",
+              );
+            },
+          ),
+          ListView.builder(
+            itemCount: 4,
+            itemBuilder: (BuildContext context, int index) {
+              return CardDeclaration();
+            },
+          ),
+        ],
+>>>>>>> Stashed changes
       ),
       floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: ExpandableFab(

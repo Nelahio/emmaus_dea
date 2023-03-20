@@ -9,6 +9,13 @@ class HomeAppBar extends StatelessWidget with PreferredSizeWidget {
       elevation: 10,
       toolbarHeight: 70,
       backgroundColor: Colors.black,
+      actions: [
+        Image.asset(
+          "assets/logo_international.png",
+          fit: BoxFit.contain,
+          height: 60,
+        ),
+      ],
       title: Image.asset(
         "assets/logo.png",
         fit: BoxFit.contain,
