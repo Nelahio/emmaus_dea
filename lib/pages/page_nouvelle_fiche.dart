@@ -1,3 +1,4 @@
+import 'package:emmaus_dea/widgets/HomeAppBar.dart';
 import 'package:flutter/material.dart';
 
 class PageNouvelleFiche extends StatefulWidget {
@@ -10,6 +11,11 @@ class PageNouvelleFiche extends StatefulWidget {
 class _PageNouvelleFicheState extends State<PageNouvelleFiche> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: HomeAppBar(),
+      body: ListView(
+        children: [],
+      ),
+    );
   }
 }

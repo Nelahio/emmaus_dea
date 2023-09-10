@@ -28,31 +28,14 @@ class _CardFicheState extends State<CardFiche> {
       semanticContainer: false,
       clipBehavior: Clip.antiAliasWithSaveLayer,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(20.0),
       ),
-      elevation: 5,
-      margin: EdgeInsets.all(10),
+      elevation: 7,
+      margin: EdgeInsets.all(12),
       child: Column(
         children: [
           ListTile(
-            onTap: () {
-              final snackBar = SnackBar(
-                elevation: 5,
-                behavior: SnackBarBehavior.floating,
-                backgroundColor: ColorsApp.Blue_Color,
-                content: const Text('Yay! A SnackBar!'),
-                shape: RoundedRectangleBorder(
-                  // side: BorderSide(color: ColorsApp.Yellow_Color, width: 5),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              );
-
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(snackBar);
-              print("page détail fiche");
-            },
-            isThreeLine: true,
+            // isThreeLine: true,
             tileColor: getColor(widget.provenance),
             textColor: Colors.white,
             title: Text(
@@ -86,7 +69,7 @@ class _CardFicheState extends State<CardFiche> {
               children: <Widget>[
                 IconButton(
                   icon: Icon(
-                    IconData(0xe21a, fontFamily: 'MaterialIcons'),
+                    const IconData(0xe21a, fontFamily: 'MaterialIcons'),
                     size: 20.0,
                     color: Colors.brown[900],
                   ),
@@ -106,6 +89,23 @@ class _CardFicheState extends State<CardFiche> {
                 ),
               ],
             ),
+            onTap: () {
+              final snackBar = SnackBar(
+                elevation: 5,
+                behavior: SnackBarBehavior.floating,
+                backgroundColor: ColorsApp.Blue_Color,
+                content: const Text('Yay! A SnackBar!'),
+                shape: RoundedRectangleBorder(
+                  // side: BorderSide(color: ColorsApp.Yellow_Color, width: 5),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              );
+
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(snackBar);
+              print("page détail fiche");
+            },
           ),
         ],
       ),

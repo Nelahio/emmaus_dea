@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class HomeAppBar extends StatelessWidget with PreferredSizeWidget {
+class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   const HomeAppBar({Key? key}) : super(key: key);
 
   @override

@@ -43,12 +43,12 @@ class _PageHomeState extends State<PageHome> {
             tooltip: "Déclarations",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.directions_car_rounded),
+            icon: Icon(Icons.attach_money_rounded),
             label: "Livraisons",
             tooltip: "Livraisons",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.directions_car_rounded),
+            icon: Icon(Icons.local_shipping_rounded),
             label: "Ramasses",
             tooltip: "Ramasses",
           ),

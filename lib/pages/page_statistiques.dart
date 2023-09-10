@@ -34,7 +34,7 @@ class _PageStatistiquesState extends State<PageStatistiques>
               text: "Apports volontaires",
             ),
             Tab(
-              icon: Icon(Icons.fire_truck_rounded),
+              icon: Icon(Icons.local_shipping_rounded),
               text: "Collectes à domicile",
             ),
             Tab(
