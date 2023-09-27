@@ -1,113 +1,124 @@
 import 'package:emmaus_dea/class/colors_app.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-class CardFiche extends StatefulWidget {
+import '../../models/FicheTracabilite.dart';
+
+class CardFiche extends StatelessWidget {
   final String provenance;
-  const CardFiche({Key? key, required this.provenance}) : super(key: key);
+  final FicheTracabilite ficheTracabilite;
 
-  @override
-  State<CardFiche> createState() => _CardFicheState();
-}
+  CardFiche({
+    required this.provenance,
+    required this.ficheTracabilite,
+  });
 
-Color getColor(String provenance) {
-  if (provenance == "Apport volontaire") {
-    return ColorsApp.Apport_Color;
-  } else if (provenance == "Collecte à domicile") {
-    return ColorsApp.Collecte_Color;
-  } else if (provenance == "Réemploi") {
-    return ColorsApp.Reemploi_Color;
-  } else {
-    return ColorsApp.Blue_Color;
+  final DateFormat dateFormat = DateFormat("dd/MM/yyyy");
+
+  Color getColor() {
+    if (provenance == "Apport volontaire") {
+      return ColorsApp.Apport_Color;
+    } else if (provenance == "Collecte à domicile") {
+      return ColorsApp.Collecte_Color;
+    } else if (provenance == "Réemploi") {
+      return ColorsApp.Reemploi_Color;
+    } else {
+      return Colors.blue; // Couleur par défaut
+    }
   }
-}
 
-class _CardFicheState extends State<CardFiche> {
   @override
   Widget build(BuildContext context) {
-    return Card(
-      semanticContainer: false,
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0),
-      ),
-      elevation: 7,
-      margin: EdgeInsets.all(12),
-      child: Column(
-        children: [
-          ListTile(
-            // isThreeLine: true,
-            tileColor: getColor(widget.provenance),
-            textColor: Colors.white,
-            title: Text(
-              widget.provenance,
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            // isThreeLine: true,
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Icon(Icons.access_time_rounded),
-                Text(
-                  "19/03/2023",
-                  style: TextStyle(fontWeight: FontWeight.bold),
+    return Container(
+      constraints: BoxConstraints(maxWidth: 300), // Largeur maximale souhaitée
+      child: Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: getColor(),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(12.0),
+                  topRight: Radius.circular(12.0),
                 ),
-                SizedBox(
-                  height: 5,
-                ),
-                // Icon(Icons.delivery_dining_rounded,
-                //     color: ColorsApp.Yellow_Color),
-                Text("5 meubles"),
-                SizedBox(
-                  height: 5,
-                ),
-                // Icon(Icons.shopping_bag_rounded),
-                Text("300 kg")
-              ],
-            ),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(
-                    const IconData(0xe21a, fontFamily: 'MaterialIcons'),
-                    size: 20.0,
-                    color: Colors.brown[900],
+              ),
+              child: Center(
+                child: Text(
+                  provenance,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: Colors.white,
                   ),
-                  onPressed: () {
-                    //   _onDeleteItemPressed(index);
-                  },
                 ),
-                IconButton(
-                  icon: Icon(
-                    Icons.delete_outline,
-                    size: 20.0,
-                    color: Colors.brown[900],
-                  ),
-                  onPressed: () {
-                    //   _onDeleteItemPressed(index);
-                  },
-                ),
-              ],
+              ),
             ),
-            onTap: () {
-              final snackBar = SnackBar(
-                elevation: 5,
-                behavior: SnackBarBehavior.floating,
-                backgroundColor: ColorsApp.Blue_Color,
-                content: const Text('Yay! A SnackBar!'),
-                shape: RoundedRectangleBorder(
-                  // side: BorderSide(color: ColorsApp.Yellow_Color, width: 5),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              );
-
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(snackBar);
-              print("page détail fiche");
-            },
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.calendar_today,
+                        color: Colors.grey,
+                        size: 18,
+                      ),
+                      SizedBox(width: 5),
+                      Text(
+                        dateFormat.format(ficheTracabilite.DateFiche!),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.shopping_cart,
+                        color: Colors.grey,
+                        size: 18,
+                      ),
+                      SizedBox(width: 5),
+                      Text(
+                        "${ficheTracabilite.TracerFicheMeubles.length} meuble(s)",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.equalizer,
+                        color: Colors.grey,
+                        size: 18,
+                      ),
+                      SizedBox(width: 5),
+                      Text(
+                        "300 kg",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

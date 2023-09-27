@@ -59,7 +59,7 @@ class _CardProvenanceState extends State<CardProvenance> {
       setState(() {
         fiches = listeFiches;
         if (fiches != null && fiches!.isNotEmpty) {
-          lastFicheDate = fiches![0].DateFiche;
+          lastFicheDate = fiches!.last.DateFiche;
         }
       });
     } catch (error) {
@@ -81,7 +81,7 @@ class _CardProvenanceState extends State<CardProvenance> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
         ),
-        elevation: 7,
+        elevation: 5,
         margin: EdgeInsets.all(12),
         child: ListTile(
           isThreeLine: true,
@@ -91,7 +91,7 @@ class _CardProvenanceState extends State<CardProvenance> {
               getIcon(widget.provenance),
               VerticalDivider(
                 color: getColor(widget.provenance),
-                width: 20,
+                width: 25,
                 thickness: 5,
               ),
             ],
@@ -115,8 +115,9 @@ class _CardProvenanceState extends State<CardProvenance> {
               context,
               MaterialPageRoute(
                 builder: (context) => PageFiches(
-                  provenance: widget.provenance.Nom,
-                ),
+                    provenance: widget.provenance.Nom, fiches: fiches!
+                    // .sort((a, b) => a.DateFiche.compareTo(b.DateFiche)),
+                    ),
               ),
             );
           },

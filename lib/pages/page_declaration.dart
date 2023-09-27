@@ -80,6 +80,8 @@ class _PageDeclarationState extends State<PageDeclaration>
       body: TabBarView(
         controller: _tabController,
         children: [
+          // RefreshIndicator(
+          //   child:
           ListView.builder(
             itemBuilder: (context, index) {
               return CardProvenance(
@@ -88,6 +90,10 @@ class _PageDeclarationState extends State<PageDeclaration>
             },
             itemCount: provenances.length,
           ),
+          // onRefresh: () async {
+          //   refreshCardProvenance();
+          // },
+          // ),
           FutureBuilder<List<CategorieMeuble>?>(
             future: CategorieMeubleService.getCategoriesMeuble(),
             builder: (context, snapshot) {
