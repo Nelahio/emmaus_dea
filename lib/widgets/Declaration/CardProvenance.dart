@@ -1,4 +1,3 @@
-import 'package:emmaus_dea/class/api/FicheTracabiliteService.dart';
 import 'package:emmaus_dea/class/colors_app.dart';
 import 'package:emmaus_dea/models/Provenance.dart';
 import 'package:emmaus_dea/pages/page_fiches.dart';
@@ -9,8 +8,11 @@ import '../../models/FicheTracabilite.dart';
 
 class CardProvenance extends StatefulWidget {
   final Provenance provenance;
+  final List<FicheTracabilite>? fiches;
 
-  const CardProvenance({Key? key, required this.provenance}) : super(key: key);
+  const CardProvenance(
+      {Key? key, required this.provenance, required this.fiches})
+      : super(key: key);
 
   @override
   State<CardProvenance> createState() => _CardProvenanceState();
@@ -41,35 +43,22 @@ Icon getIcon(Provenance provenance) {
 }
 
 class _CardProvenanceState extends State<CardProvenance> {
-  List<FicheTracabilite>? fiches;
   DateTime? lastFicheDate;
   DateFormat dateFormat = DateFormat("dd/MM/yyyy");
 
   @override
   void initState() {
     super.initState();
-    fetchFichesTracabilite();
+    fetchLastFicheDate();
+    print(lastFicheDate);
   }
 
-  Future<void> fetchFichesTracabilite() async {
-    try {
-      final listeFiches =
-          await FicheTracabiliteService.getFichesTracabiliteByProvenance(
-              widget.provenance.Id);
+  Future<void> fetchLastFicheDate() async {
+    if (widget.fiches != null && widget.fiches!.isNotEmpty) {
+      final lastDate = widget.fiches!.last.DateFiche;
       setState(() {
-        fiches = listeFiches;
-        if (fiches != null && fiches!.isNotEmpty) {
-          lastFicheDate = fiches!.last.DateFiche;
-        }
+        lastFicheDate = lastDate;
       });
-    } catch (error) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Erreur lors du chargement des fiches : $error"),
-          ),
-        );
-      }
     }
   }
 
@@ -100,8 +89,8 @@ class _CardProvenanceState extends State<CardProvenance> {
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (fiches != null && fiches!.isNotEmpty)
-                Text("${fiches!.length} fiche(s)")
+              if (widget.fiches != null && widget.fiches!.isNotEmpty)
+                Text("${widget.fiches!.length} fiche(s)")
               else
                 Text("Aucune fiche"),
               if (lastFicheDate != null)
@@ -115,7 +104,7 @@ class _CardProvenanceState extends State<CardProvenance> {
               context,
               MaterialPageRoute(
                 builder: (context) => PageFiches(
-                    provenance: widget.provenance.Nom, fiches: fiches!
+                    provenance: widget.provenance.Nom, fiches: widget.fiches!
                     // .sort((a, b) => a.DateFiche.compareTo(b.DateFiche)),
                     ),
               ),

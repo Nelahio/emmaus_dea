@@ -6,6 +6,8 @@ import 'package:emmaus_dea/widgets/Declaration/ExpandableFabDeclaration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 
+import '../class/api/FicheTracabiliteService.dart';
+import '../models/FicheTracabilite.dart';
 import '../models/Provenance.dart';
 import '../widgets/Declaration/CardProvenance.dart';
 
@@ -20,6 +22,7 @@ class _PageDeclarationState extends State<PageDeclaration>
     with TickerProviderStateMixin {
   late TabController _tabController;
   late List<Provenance> provenances = [];
+  Map<int, List<FicheTracabilite>?> fichesMap = {};
 
   @override
   void initState() {
@@ -36,6 +39,11 @@ class _PageDeclarationState extends State<PageDeclaration>
         setState(() {
           provenances = provs;
         });
+        // Appel API pour chaque provenance et stockage des données dans le map
+        for (var prov in provs) {
+          final fiches = await fetchFichesTracabilite(prov.Id);
+          fichesMap[prov.Id] = fiches;
+        }
       } else {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -54,6 +62,26 @@ class _PageDeclarationState extends State<PageDeclaration>
         );
       }
     }
+  }
+
+  Future<List<FicheTracabilite>?> fetchFichesTracabilite(
+      int provenanceId) async {
+    try {
+      final listeFiches =
+          await FicheTracabiliteService.getFichesTracabiliteByProvenance(
+              provenanceId);
+      print(listeFiches);
+      return listeFiches;
+    } catch (error) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Erreur lors du chargement des fiches : $error"),
+          ),
+        );
+      }
+    }
+    return null;
   }
 
   @override
@@ -86,6 +114,7 @@ class _PageDeclarationState extends State<PageDeclaration>
             itemBuilder: (context, index) {
               return CardProvenance(
                 provenance: provenances[index],
+                fiches: fichesMap[provenances[index].Id],
               );
             },
             itemCount: provenances.length,
