@@ -1,23 +1,23 @@
 class Statut {
-  final int id;
-  final String libelle;
+  final int Id;
+  final String Libelle;
 
   Statut({
-    required this.id,
-    required this.libelle,
+    required this.Id,
+    required this.Libelle,
   });
 
   factory Statut.fromJson(Map<String, dynamic> json) {
     return Statut(
-      id: json['id'],
-      libelle: json['libelle'],
+      Id: json['Id'],
+      Libelle: json['Libelle'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'libelle': libelle,
+      'Id': Id,
+      'Libelle': Libelle,
     };
   }
 }

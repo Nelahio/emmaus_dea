@@ -1,19 +1,19 @@
 class TrancheHoraire {
-  final int id;
-  final Duration heureDebut;
-  final Duration heureFin;
+  final int Id;
+  final Duration HeureDebut;
+  final Duration HeureFin;
 
   TrancheHoraire({
-    required this.id,
-    required this.heureDebut,
-    required this.heureFin,
+    required this.Id,
+    required this.HeureDebut,
+    required this.HeureFin,
   });
 
   factory TrancheHoraire.fromJson(Map<String, dynamic> json) {
     return TrancheHoraire(
-      id: json['id'],
-      heureDebut: Duration(milliseconds: json['heureDebut']),
-      heureFin: Duration(milliseconds: json['heureFin']),
+      Id: json['Id'],
+      HeureDebut: Duration(milliseconds: json['HeureDebut']),
+      HeureFin: Duration(milliseconds: json['HeureFin']),
     );
   }
 }

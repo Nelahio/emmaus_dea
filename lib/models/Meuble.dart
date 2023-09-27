@@ -1,31 +1,31 @@
 class Meuble {
-  final int id;
-  final String nom;
-  final int poids;
-  final int categorieMeubleId;
+  final int Id;
+  final String Nom;
+  final int Poids;
+  final int CategorieMeubleId;
 
   Meuble({
-    required this.id,
-    required this.nom,
-    required this.poids,
-    required this.categorieMeubleId,
+    required this.Id,
+    required this.Nom,
+    required this.Poids,
+    required this.CategorieMeubleId,
   });
 
   factory Meuble.fromJson(Map<String, dynamic> json) {
     return Meuble(
-      id: json['id'],
-      nom: json['nom'],
-      poids: json['poids'],
-      categorieMeubleId: json['id_categorie_meuble'],
+      Id: json['Id'],
+      Nom: json['Nom'],
+      Poids: json['Poids'],
+      CategorieMeubleId: json['CategorieMeubleId'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'nom': nom,
-      'poids': poids,
-      'id_categorie_meuble': categorieMeubleId,
+      'Id': Id,
+      'Nom': Nom,
+      'Poids': Poids,
+      'CategorieMeubleId': CategorieMeubleId,
     };
   }
 }

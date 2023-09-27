@@ -1,27 +1,27 @@
 class CollecterRamasseMeuble {
-  final int? ramasseId;
-  final int meubleId;
-  final int quantiteCollectee;
+  final int RamasseId;
+  final int MeubleId;
+  final int QuantiteCollectee;
 
   CollecterRamasseMeuble({
-    this.ramasseId,
-    required this.meubleId,
-    required this.quantiteCollectee,
+    required this.RamasseId,
+    required this.MeubleId,
+    required this.QuantiteCollectee,
   });
 
   factory CollecterRamasseMeuble.fromJson(Map<String, dynamic> json) {
     return CollecterRamasseMeuble(
-      ramasseId: json['id_ramasse'],
-      meubleId: json['id_meuble'],
-      quantiteCollectee: json['quantite_collectee'],
+      RamasseId: json['id_ramasse'],
+      MeubleId: json['id_meuble'],
+      QuantiteCollectee: json['quantite_collectee'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'id_ramasse': ramasseId,
-      'id_meuble': meubleId,
-      'quantite_collectee': quantiteCollectee,
+      'id_ramasse': RamasseId,
+      'id_meuble': MeubleId,
+      'quantite_collectee': QuantiteCollectee,
     };
   }
 }

@@ -9,19 +9,24 @@ class TracerFicheMeuble {
     required this.quantite,
   });
 
+  @override
+  String toString() {
+    return 'TracerFicheMeuble{FicheTracabiliteId: $ficheTracabiliteId, MeubleId: $meubleId, Quantite: $quantite}';
+  }
+
   factory TracerFicheMeuble.fromJson(Map<String, dynamic> json) {
     return TracerFicheMeuble(
-      ficheTracabiliteId: json['ficheTracabiliteId'],
-      meubleId: json['meubleId'],
-      quantite: json['quantite'],
+      ficheTracabiliteId: json['FicheTracabiliteId'],
+      meubleId: json['MeubleId'],
+      quantite: json['Quantite'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'ficheTracabiliteId': ficheTracabiliteId,
-      'meubleId': meubleId,
-      'quantite': quantite,
+      'FicheTracabiliteId': ficheTracabiliteId,
+      'MeubleId': meubleId,
+      'Quantite': quantite,
     };
   }
 }
