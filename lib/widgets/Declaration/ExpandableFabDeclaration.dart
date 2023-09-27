@@ -25,7 +25,7 @@ class _ExpandableFabDeclarationState extends State<ExpandableFabDeclaration> {
       ),
       children: [
         FloatingActionButton.extended(
-          heroTag: const Text("BoutonFiche"),
+          heroTag: Text("BoutonFiche"),
           backgroundColor: ColorsApp.Blue_Color,
           icon: const Icon(Icons.add_card_rounded),
           label: const Text("Fiche"),
@@ -39,7 +39,7 @@ class _ExpandableFabDeclarationState extends State<ExpandableFabDeclaration> {
           },
         ),
         FloatingActionButton.extended(
-          heroTag: const Text("BoutonDeclaration"),
+          heroTag: Text("BoutonDeclaration"),
           backgroundColor: ColorsApp.Blue_Color,
           icon: const Icon(Icons.add_chart_rounded),
           label: const Text("Déclaration"),
