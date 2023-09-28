@@ -16,30 +16,6 @@ class CardProvenance extends StatefulWidget {
   State<CardProvenance> createState() => _CardProvenanceState();
 }
 
-Color getColor(Provenance provenance) {
-  if (provenance.Nom == "Apport volontaire") {
-    return ColorsApp.Apport_Color;
-  } else if (provenance.Nom == "Collecte à domicile") {
-    return ColorsApp.Collecte_Color;
-  } else if (provenance.Nom == "Réemploi") {
-    return ColorsApp.Reemploi_Color;
-  } else {
-    return ColorsApp.Blue_Color;
-  }
-}
-
-Icon getIcon(Provenance provenance) {
-  if (provenance.Nom == "Apport volontaire") {
-    return Icon(Icons.directions_car_rounded);
-  } else if (provenance.Nom == "Collecte à domicile") {
-    return Icon(Icons.local_shipping_rounded);
-  } else if (provenance.Nom == "Réemploi") {
-    return Icon(Icons.attach_money_rounded);
-  } else {
-    return Icon(Icons.card_travel_rounded);
-  }
-}
-
 class _CardProvenanceState extends State<CardProvenance> {
   DateFormat dateFormat = DateFormat("dd/MM/yyyy");
 
@@ -48,11 +24,31 @@ class _CardProvenanceState extends State<CardProvenance> {
     super.initState();
   }
 
+  Widget buildSubtitle(List<FicheTracabilite>? fiches) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (fiches != null && fiches.isNotEmpty)
+          Text("${fiches.length} fiche(s)")
+        else
+          Text("Aucune fiche"),
+        if (fiches != null &&
+            fiches.isNotEmpty &&
+            fiches.last.DateFiche != null)
+          Text("Dernière fiche le ${dateFormat.format(fiches.last.DateFiche)}")
+        else
+          Text("Date de la dernière fiche inconnue"),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<FicheTracabiliteModel>(
       builder: (context, ficheModel, child) {
         final fiches = ficheModel.fichesMap[widget.provenance.Id];
+        final provenanceInfo = getProvenanceInfo(widget.provenance);
+
         return Center(
           child: Card(
             clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -66,31 +62,16 @@ class _CardProvenanceState extends State<CardProvenance> {
               leading: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  getIcon(widget.provenance),
+                  provenanceInfo.icon,
                   VerticalDivider(
-                    color: getColor(widget.provenance),
+                    color: provenanceInfo.color,
                     width: 25,
                     thickness: 5,
                   ),
                 ],
               ),
               title: Text(widget.provenance.Nom),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (fiches != null && fiches.isNotEmpty)
-                    Text("${fiches.length} fiche(s)")
-                  else
-                    Text("Aucune fiche"),
-                  if (fiches != null &&
-                      fiches.isNotEmpty &&
-                      fiches.last.DateFiche != null)
-                    Text(
-                        "Dernière fiche le ${dateFormat.format(fiches.last.DateFiche)}")
-                  else
-                    Text("Date de la dernière fiche inconnue"),
-                ],
-              ),
+              subtitle: buildSubtitle(fiches),
               onTap: () {
                 Navigator.push(
                   context,
@@ -98,7 +79,6 @@ class _CardProvenanceState extends State<CardProvenance> {
                     builder: (context) => PageFiches(
                       provenance: widget.provenance.Nom,
                       fiches: fiches ?? [],
-                      // .sort((a, b) => a.DateFiche.compareTo(b.DateFiche)),
                     ),
                   ),
                 );
