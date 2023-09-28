@@ -1,6 +1,8 @@
 import 'package:emmaus_dea/class/api/CategorieMeubleService.dart';
 import 'package:emmaus_dea/class/api/ProvenanceService.dart';
 import 'package:emmaus_dea/models/CategorieMeuble.dart';
+import 'package:emmaus_dea/models/FicheTracabilite.dart';
+import 'package:emmaus_dea/models/Provenance.dart';
 import 'package:emmaus_dea/widgets/Declaration/CardDeclaration.dart';
 import 'package:emmaus_dea/widgets/Declaration/ExpandableFabDeclaration.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +10,6 @@ import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:provider/provider.dart';
 
 import '../class/api/FicheTracabiliteService.dart';
-import '../models/FicheTracabilite.dart';
-import '../models/Provenance.dart';
 import '../widgets/Declaration/CardProvenance.dart';
 
 class PageDeclaration extends StatefulWidget {
@@ -29,7 +29,6 @@ class _PageDeclarationState extends State<PageDeclaration>
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    provenances = [];
     loadProvenances();
   }
 
@@ -40,27 +39,14 @@ class _PageDeclarationState extends State<PageDeclaration>
         setState(() {
           provenances = provs;
         });
-        // Appel API pour chaque provenance
         for (var prov in provs) {
           fetchFichesTracabilite(prov.Id);
         }
       } else {
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text("Erreur lors du chargement des provenances."),
-            ),
-          );
-        }
+        showSnackBar("Erreur lors du chargement des provenances.");
       }
     } catch (error) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Erreur lors du chargement des provenances: $error"),
-          ),
-        );
-      }
+      showSnackBar("Erreur lors du chargement des provenances: $error");
     }
   }
 
@@ -71,21 +57,71 @@ class _PageDeclarationState extends State<PageDeclaration>
               provenanceId);
 
       if (listeFiches != null) {
-        // Utilisez Provider pour mettre à jour l'état des fiches
         context
             .read<FicheTracabiliteModel>()
             .updateFiches(provenanceId, listeFiches);
       }
     } catch (error) {
       print(error);
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Erreur lors du chargement des fiches: $error"),
-          ),
-        );
-      }
+      showSnackBar("Erreur lors du chargement des fiches: $error");
     }
+  }
+
+  void showSnackBar(String message) {
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+        ),
+      );
+    }
+  }
+
+  Widget buildProvenanceList() {
+    return RefreshIndicator(
+      child: ListView.builder(
+        itemBuilder: (context, index) {
+          return CardProvenance(
+            provenance: provenances[index],
+          );
+        },
+        itemCount: provenances.length,
+      ),
+      onRefresh: () async {
+        loadProvenances();
+      },
+    );
+  }
+
+  Widget buildCategorieMeubleList() {
+    return FutureBuilder<List<CategorieMeuble>?>(
+      future: CategorieMeubleService.getCategoriesMeuble(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          final categories = snapshot.data;
+          if (categories != null) {
+            return ListView.builder(
+              itemBuilder: (context, index) {
+                return CardDeclaration();
+              },
+              itemCount: categories.length,
+            );
+          } else {
+            return Center(
+              child: Text("Erreur lors de la récupération des données."),
+            );
+          }
+        } else if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        } else {
+          return Center(
+            child: Text("État de connexion non géré"),
+          );
+        }
+      },
+    );
   }
 
   @override
@@ -95,7 +131,6 @@ class _PageDeclarationState extends State<PageDeclaration>
         backgroundColor: Colors.black,
         toolbarHeight: 0,
         bottom: TabBar(
-          // indicatorSize: ,
           controller: _tabController,
           automaticIndicatorColorAdjustment: true,
           isScrollable: true,
@@ -112,47 +147,8 @@ class _PageDeclarationState extends State<PageDeclaration>
       body: TabBarView(
         controller: _tabController,
         children: [
-          RefreshIndicator(
-            child: ListView.builder(
-              itemBuilder: (context, index) {
-                return CardProvenance(
-                  provenance: provenances[index],
-                );
-              },
-              itemCount: provenances.length,
-            ),
-            onRefresh: () async {
-              loadProvenances();
-            },
-          ),
-          FutureBuilder<List<CategorieMeuble>?>(
-            future: CategorieMeubleService.getCategoriesMeuble(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                final provenances = snapshot.data;
-                if (provenances != null) {
-                  return ListView.builder(
-                    itemBuilder: (context, index) {
-                      return CardDeclaration();
-                    },
-                    itemCount: provenances.length,
-                  );
-                } else {
-                  return Center(
-                    child: Text("Erreur lors de la récupération des données."),
-                  );
-                }
-              } else if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else {
-                return Center(
-                  child: Text("État de connexion non géré"),
-                );
-              }
-            },
-          )
+          buildProvenanceList(),
+          buildCategorieMeubleList(),
         ],
       ),
       floatingActionButtonLocation: ExpandableFab.location,
