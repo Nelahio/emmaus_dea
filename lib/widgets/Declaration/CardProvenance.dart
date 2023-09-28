@@ -24,7 +24,21 @@ class _CardProvenanceState extends State<CardProvenance> {
     super.initState();
   }
 
+  DateTime? findMostRecentDate(List<FicheTracabilite>? fiches) {
+    if (fiches != null && fiches.isNotEmpty) {
+      // Triez la liste des fiches par date de manière décroissante (de la plus récente à la plus ancienne).
+      fiches.sort((a, b) => b.DateFiche.compareTo(a.DateFiche));
+
+      // La première fiche dans la liste triée est la plus récente.
+      return fiches.first.DateFiche;
+    } else {
+      return null; // Aucune fiche ou liste nulle
+    }
+  }
+
   Widget buildSubtitle(List<FicheTracabilite>? fiches) {
+    final mostRecentDate = findMostRecentDate(fiches);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -32,10 +46,8 @@ class _CardProvenanceState extends State<CardProvenance> {
           Text("${fiches.length} fiche(s)")
         else
           Text("Aucune fiche"),
-        if (fiches != null &&
-            fiches.isNotEmpty &&
-            fiches.last.DateFiche != null)
-          Text("Dernière fiche le ${dateFormat.format(fiches.last.DateFiche)}")
+        if (mostRecentDate != null)
+          Text("Dernière fiche le ${dateFormat.format(mostRecentDate)}")
         else
           Text("Date de la dernière fiche inconnue"),
       ],
