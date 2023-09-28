@@ -14,110 +14,94 @@ class CardFiche extends StatelessWidget {
   });
 
   final DateFormat dateFormat = DateFormat("dd/MM/yyyy");
+  final DateFormat dayFormat = DateFormat("dd");
+  final DateFormat monthFormat = DateFormat("MM");
+  final DateFormat yearFormat = DateFormat("yyyy");
 
   Color getColor() {
-    if (provenance == "Apport volontaire") {
-      return ColorsApp.Apport_Color;
-    } else if (provenance == "Collecte à domicile") {
-      return ColorsApp.Collecte_Color;
-    } else if (provenance == "Réemploi") {
-      return ColorsApp.Reemploi_Color;
-    } else {
-      return Colors.blue; // Couleur par défaut
+    switch (provenance) {
+      case "Apport volontaire":
+        return ColorsApp.Apport_Color;
+      case "Collecte à domicile":
+        return ColorsApp.Collecte_Color;
+      case "Réemploi":
+        return ColorsApp.Reemploi_Color;
+      default:
+        return Colors.blue; // Couleur par défaut
     }
+  }
+
+  Widget buildDateInfo() {
+    final DateTime date = ficheTracabilite.DateFiche!;
+    final String day = dayFormat.format(date);
+    final String month = monthFormat.format(date);
+    final String year = yearFormat.format(date);
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          day,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Text(
+          month,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Text(
+          year,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: BoxConstraints(maxWidth: 300), // Largeur maximale souhaitée
+    return Center(
       child: Card(
-        elevation: 4,
+        clipBehavior: Clip.antiAliasWithSaveLayer,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
+          borderRadius: BorderRadius.circular(16.0),
+          side: BorderSide(
+            color: getColor(),
+            width: 3.0,
+          ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: EdgeInsets.all(12),
-              decoration: BoxDecoration(
+        elevation: 5,
+        margin: EdgeInsets.all(12),
+        child: ListTile(
+          isThreeLine: true,
+          leading: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              buildDateInfo(),
+              VerticalDivider(
                 color: getColor(),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(12.0),
-                  topRight: Radius.circular(12.0),
-                ),
+                width: 25,
+                thickness: 5,
               ),
-              child: Center(
-                child: Text(
-                  provenance,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
+            ],
+          ),
+          title: Text(
+            provenance,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
             ),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.calendar_today,
-                        color: Colors.grey,
-                        size: 18,
-                      ),
-                      SizedBox(width: 5),
-                      Text(
-                        dateFormat.format(ficheTracabilite.DateFiche!),
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.shopping_cart,
-                        color: Colors.grey,
-                        size: 18,
-                      ),
-                      SizedBox(width: 5),
-                      Text(
-                        "${ficheTracabilite.TracerFicheMeubles.length} meuble(s)",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.equalizer,
-                        color: Colors.grey,
-                        size: 18,
-                      ),
-                      SizedBox(width: 5),
-                      Text(
-                        "300 kg",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
+          ),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("${ficheTracabilite.TracerFicheMeubles.length} meuble(s)"),
+            ],
+          ),
         ),
       ),
     );
