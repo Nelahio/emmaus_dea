@@ -5,6 +5,7 @@ import 'package:emmaus_dea/widgets/Declaration/CardDeclaration.dart';
 import 'package:emmaus_dea/widgets/Declaration/ExpandableFabDeclaration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
+import 'package:provider/provider.dart';
 
 import '../class/api/FicheTracabiliteService.dart';
 import '../models/FicheTracabilite.dart';
@@ -39,10 +40,9 @@ class _PageDeclarationState extends State<PageDeclaration>
         setState(() {
           provenances = provs;
         });
-        // Appel API pour chaque provenance et stockage des données dans le map
+        // Appel API pour chaque provenance
         for (var prov in provs) {
-          final fiches = await fetchFichesTracabilite(prov.Id);
-          fichesMap[prov.Id] = fiches;
+          fetchFichesTracabilite(prov.Id);
         }
       } else {
         if (context.mounted) {
@@ -64,24 +64,28 @@ class _PageDeclarationState extends State<PageDeclaration>
     }
   }
 
-  Future<List<FicheTracabilite>?> fetchFichesTracabilite(
-      int provenanceId) async {
+  Future<void> fetchFichesTracabilite(int provenanceId) async {
     try {
       final listeFiches =
           await FicheTracabiliteService.getFichesTracabiliteByProvenance(
               provenanceId);
-      print(listeFiches);
-      return listeFiches;
+
+      if (listeFiches != null) {
+        // Utilisez Provider pour mettre à jour l'état des fiches
+        context
+            .read<FicheTracabiliteModel>()
+            .updateFiches(provenanceId, listeFiches);
+      }
     } catch (error) {
+      print(error);
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("Erreur lors du chargement des fiches : $error"),
+            content: Text("Erreur lors du chargement des fiches: $error"),
           ),
         );
       }
     }
-    return null;
   }
 
   @override
@@ -108,21 +112,19 @@ class _PageDeclarationState extends State<PageDeclaration>
       body: TabBarView(
         controller: _tabController,
         children: [
-          // RefreshIndicator(
-          //   child:
-          ListView.builder(
-            itemBuilder: (context, index) {
-              return CardProvenance(
-                provenance: provenances[index],
-                fiches: fichesMap[provenances[index].Id],
-              );
+          RefreshIndicator(
+            child: ListView.builder(
+              itemBuilder: (context, index) {
+                return CardProvenance(
+                  provenance: provenances[index],
+                );
+              },
+              itemCount: provenances.length,
+            ),
+            onRefresh: () async {
+              loadProvenances();
             },
-            itemCount: provenances.length,
           ),
-          // onRefresh: () async {
-          //   refreshCardProvenance();
-          // },
-          // ),
           FutureBuilder<List<CategorieMeuble>?>(
             future: CategorieMeubleService.getCategoriesMeuble(),
             builder: (context, snapshot) {

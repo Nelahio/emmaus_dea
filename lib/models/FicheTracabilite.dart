@@ -1,4 +1,15 @@
+import 'package:flutter/foundation.dart';
+
 import 'TracerFicheMeuble.dart';
+
+class FicheTracabiliteModel extends ChangeNotifier {
+  final Map<int, List<FicheTracabilite>?> fichesMap = {};
+
+  void updateFiches(int provenanceId, List<FicheTracabilite> fiches) {
+    fichesMap[provenanceId] = fiches;
+    notifyListeners();
+  }
+}
 
 class FicheTracabilite {
   final int Id;
