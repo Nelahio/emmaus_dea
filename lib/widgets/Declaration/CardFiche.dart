@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../models/FicheTracabilite.dart';
+import '../../models/TracerFicheMeuble.dart';
 
 class CardFiche extends StatelessWidget {
   final String provenance;
@@ -31,8 +32,16 @@ class CardFiche extends StatelessWidget {
     }
   }
 
+  double calculateTotalWeight(List<TracerFicheMeuble> tracerFicheMeubles) {
+    double poidsTotal = 0.0;
+    for (var tracerFicheMeuble in tracerFicheMeubles) {
+      poidsTotal += tracerFicheMeuble.meuble.Poids;
+    }
+    return poidsTotal;
+  }
+
   Widget buildDateInfo() {
-    final DateTime date = ficheTracabilite.DateFiche!;
+    final DateTime date = ficheTracabilite.DateFiche;
     final String day = dayFormat.format(date);
     final String month = monthFormat.format(date);
     final String year = yearFormat.format(date);
@@ -64,6 +73,8 @@ class CardFiche extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final poidsTotal =
+        calculateTotalWeight(ficheTracabilite.TracerFicheMeubles);
     return Center(
       child: Card(
         clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -100,6 +111,10 @@ class CardFiche extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text("${ficheTracabilite.TracerFicheMeubles.length} meuble(s)"),
+              SizedBox(
+                width: 5,
+              ),
+              Text("${poidsTotal} kg")
             ],
           ),
         ),
