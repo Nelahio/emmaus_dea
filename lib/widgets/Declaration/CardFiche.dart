@@ -5,6 +5,13 @@ import 'package:intl/intl.dart';
 import '../../models/FicheTracabilite.dart';
 import '../../models/TracerFicheMeuble.dart';
 
+class CalculatedInfo {
+  final int nombreMeubles;
+  final double poidsTotal;
+
+  CalculatedInfo({required this.nombreMeubles, required this.poidsTotal});
+}
+
 class CardFiche extends StatelessWidget {
   final String provenance;
   final FicheTracabilite ficheTracabilite;
@@ -32,12 +39,17 @@ class CardFiche extends StatelessWidget {
     }
   }
 
-  double calculateTotalWeight(List<TracerFicheMeuble> tracerFicheMeubles) {
+  CalculatedInfo calculerInfosMeubles(
+      List<TracerFicheMeuble> tracerFicheMeubles) {
+    int nombreMeubles = 0;
     double poidsTotal = 0.0;
+
     for (var tracerFicheMeuble in tracerFicheMeubles) {
-      poidsTotal += tracerFicheMeuble.meuble.Poids;
+      nombreMeubles += tracerFicheMeuble.quantite;
+      poidsTotal += tracerFicheMeuble.meuble.Poids * tracerFicheMeuble.quantite;
     }
-    return poidsTotal;
+
+    return CalculatedInfo(nombreMeubles: nombreMeubles, poidsTotal: poidsTotal);
   }
 
   Widget buildDateInfo() {
@@ -73,8 +85,7 @@ class CardFiche extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final poidsTotal =
-        calculateTotalWeight(ficheTracabilite.TracerFicheMeubles);
+    final infos = calculerInfosMeubles(ficheTracabilite.TracerFicheMeubles);
     return Center(
       child: Card(
         clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -110,11 +121,11 @@ class CardFiche extends StatelessWidget {
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("${ficheTracabilite.TracerFicheMeubles.length} meuble(s)"),
+              Text("${infos.nombreMeubles} meuble(s)"),
               SizedBox(
                 width: 5,
               ),
-              Text("${poidsTotal} kg")
+              Text("${infos.poidsTotal} kg")
             ],
           ),
         ),
