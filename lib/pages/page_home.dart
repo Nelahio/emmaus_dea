@@ -5,7 +5,7 @@ import 'package:emmaus_dea/pages/page_statistiques.dart';
 import 'package:emmaus_dea/widgets/HomeAppBar.dart';
 import 'package:flutter/material.dart';
 
-import '../class/colors_app.dart';
+import '../class/helper.dart';
 
 class PageHome extends StatefulWidget {
   const PageHome({Key? key}) : super(key: key);

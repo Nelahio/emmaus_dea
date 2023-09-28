@@ -1,4 +1,4 @@
-import 'package:emmaus_dea/class/colors_app.dart';
+import 'package:emmaus_dea/class/helper.dart';
 import 'package:emmaus_dea/models/Provenance.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -41,7 +41,6 @@ Icon getIcon(Provenance provenance) {
 }
 
 class _CardProvenanceState extends State<CardProvenance> {
-  DateTime? lastFicheDate;
   DateFormat dateFormat = DateFormat("dd/MM/yyyy");
 
   @override
