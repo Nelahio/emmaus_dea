@@ -1,108 +1,209 @@
+import 'package:emmaus_dea/class/helper.dart';
 import 'package:emmaus_dea/models/FicheTracabilite.dart';
-import 'package:emmaus_dea/widgets/HomeAppBar.dart';
+import 'package:emmaus_dea/widgets/Declaration/CardFiche.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+import '../widgets/HomeAppBar.dart';
 
 class PageFicheDetails extends StatelessWidget {
   final FicheTracabilite fiche;
-  const PageFicheDetails({Key? key, required this.fiche}) : super(key: key);
+  final String provenance;
+  final CalculatedInfo infos;
+
+  const PageFicheDetails({
+    Key? key,
+    required this.fiche,
+    required this.provenance,
+    required this.infos,
+  }) : super(key: key);
+
+  Color getColor() {
+    switch (provenance) {
+      case "Apport volontaire":
+        return ColorsApp.Apport_Color;
+      case "Collecte à domicile":
+        return ColorsApp.Collecte_Color;
+      case "Réemploi":
+        return ColorsApp.Reemploi_Color;
+      default:
+        return Colors.blue;
+    }
+  }
+
+  Widget buildProvenanceCard() {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+        side: BorderSide(
+          color: getColor(),
+          width: 2,
+        ),
+      ),
+      elevation: 0,
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      child: Container(
+        padding: const EdgeInsets.all(15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              "${provenance}",
+              style: TextStyle(
+                fontSize: 24,
+                color: Colors.grey[800],
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              "Fiche n°${fiche.Id} en date du ${DateFormat("EEEE dd/MM/yyyy", "fr_FR").format(fiche.DateFiche)}",
+              style: TextStyle(fontSize: 15, color: Colors.grey[700]),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildMeublesCard() {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(4),
+      ),
+      color: getColor(),
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            padding: const EdgeInsets.all(15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: fiche.TracerFicheMeubles.map((item) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      item.meuble.Nom,
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Text(
+                      "x ${item.quantite}",
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                );
+              }).toList(),
+            ),
+          ),
+          const Divider(
+            color: Colors.white,
+            thickness: 0.5,
+            height: 0,
+          ),
+          Expanded(
+            child: Center(
+              child: Text(
+                "${infos.nombreMeubles} meubles",
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildPoidsCard() {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(4),
+      ),
+      color: getColor(),
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      child: Center(
+        child: Text(
+          "${infos.poidsTotal} kg",
+          style: TextStyle(fontSize: 24, color: Colors.white),
+        ),
+      ),
+    );
+  }
+
+  Widget buildRamasseAssocieeCard() {
+    if (provenance == "Collecte à domicile") {
+      return Center(
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+            side: BorderSide(
+              color: getColor(),
+              width: 2,
+            ),
+          ),
+          clipBehavior: Clip.hardEdge,
+          child: InkWell(
+            splashColor: Colors.blue.withAlpha(30),
+            onTap: () {
+              debugPrint('Card tapped.');
+            },
+            child: const SizedBox(
+              width: double.infinity,
+              height: 100,
+              child: Center(
+                  child: Text(
+                'Ramasse associée',
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              )),
+            ),
+          ),
+        ),
+      );
+    } else {
+      return SizedBox.shrink(); // Retourne un widget vide pour masquer la carte
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: HomeAppBar(),
-      body: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        elevation: 3,
-        margin: EdgeInsets.all(10),
-        child: Padding(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Date du don:',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.teal,
-                ),
+      body: ListView(
+        padding: EdgeInsets.all(16.0),
+        children: [
+          buildProvenanceCard(),
+          IntrinsicHeight(
+            child: Container(
+              constraints: BoxConstraints(minHeight: 150),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    flex: 2,
+                    child: buildMeublesCard(),
+                  ),
+                  SizedBox(width: 2),
+                  Expanded(
+                    flex: 1,
+                    child: buildPoidsCard(),
+                  ),
+                ],
               ),
-              Text(
-                "date",
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-              SizedBox(height: 20),
-              Text(
-                'Provenance:',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.teal,
-                ),
-              ),
-              Text(
-                "provenance",
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-              SizedBox(height: 20),
-              Text(
-                'Nombre de meubles:',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.teal,
-                ),
-              ),
-              Text(
-                "itemCount.toString()",
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-              SizedBox(height: 20),
-              Text(
-                'Meubles donnés/livrés:',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.teal,
-                ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: fiche.TracerFicheMeubles.map((item) {
-                  return Text(
-                    '- ${item.meuble.Nom}',
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  );
-                }).toList(),
-              ),
-              SizedBox(height: 20),
-              Text(
-                'Poids des meubles:',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.teal,
-                ),
-              ),
-              Text(
-                'weight kg',
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
+          buildRamasseAssocieeCard(), // Affiche la carte "Ramasse associée" en fonction de la provenance
+        ],
       ),
     );
   }

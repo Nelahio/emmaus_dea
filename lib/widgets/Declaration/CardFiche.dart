@@ -135,6 +135,8 @@ class CardFiche extends StatelessWidget {
               MaterialPageRoute(
                 builder: (context) => PageFicheDetails(
                   fiche: ficheTracabilite,
+                  provenance: provenance,
+                  infos: infos,
                 ),
               ),
             );
