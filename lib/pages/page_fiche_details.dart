@@ -82,27 +82,42 @@ class PageFicheDetails extends StatelessWidget {
             padding: const EdgeInsets.all(15),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: fiche.TracerFicheMeubles.map((item) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      item.meuble.Nom,
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Text(
-                      "x ${item.quantite}",
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                );
-              }).toList(),
+              children: <Widget>[
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: fiche.TracerFicheMeubles.map((item) {
+                    return Row(
+                      children: [
+                        SizedBox(
+                          width: 10, // Espacement entre les éléments
+                        ),
+                        Expanded(
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Text(
+                              item.meuble.Nom,
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10, // Espacement entre le nom et la quantité
+                        ),
+                        Text(
+                          "x ${item.quantite}",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    );
+                  }).toList(),
+                ),
+              ],
             ),
           ),
           const Divider(
@@ -157,12 +172,12 @@ class PageFicheDetails extends StatelessWidget {
             onTap: () {
               debugPrint('Card tapped.');
             },
-            child: const SizedBox(
+            child: SizedBox(
               width: double.infinity,
               height: 100,
               child: Center(
                   child: Text(
-                'Ramasse associée',
+                'Ramasse n°${fiche.RamasseId} associée',
                 style: TextStyle(
                   fontSize: 20,
                 ),
@@ -185,24 +200,17 @@ class PageFicheDetails extends StatelessWidget {
         children: [
           buildProvenanceCard(),
           IntrinsicHeight(
-            child: Container(
-              constraints: BoxConstraints(minHeight: 150),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    flex: 2,
-                    child: buildMeublesCard(),
-                  ),
-                  SizedBox(width: 2),
-                  Expanded(
-                    flex: 1,
-                    child: buildPoidsCard(),
-                  ),
-                ],
-              ),
+            child: Expanded(
+              flex: 2,
+              child: buildMeublesCard(),
             ),
           ),
-          buildRamasseAssocieeCard(), // Affiche la carte "Ramasse associée" en fonction de la provenance
+          SizedBox(width: 2),
+          Expanded(
+            flex: 1,
+            child: buildPoidsCard(),
+          ),
+          buildRamasseAssocieeCard(), // Retourne la card "Ramasse associée" si la provenance est "Collecte à domicile"
         ],
       ),
     );
