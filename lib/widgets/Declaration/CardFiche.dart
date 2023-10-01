@@ -1,10 +1,10 @@
 import 'package:emmaus_dea/class/helper.dart';
-import 'package:emmaus_dea/pages/Declaration/page_fiche_details.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../models/FicheTracabilite.dart';
 import '../../models/TracerFicheMeuble.dart';
+import '../../pages/Declaration/page_fiche_details.dart';
 
 class CalculatedInfo {
   final int nombreMeubles;
@@ -87,61 +87,59 @@ class CardFiche extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final infos = calculerInfosMeubles(ficheTracabilite.TracerFicheMeubles);
-    return Center(
-      child: Card(
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16.0),
-          side: BorderSide(
-            color: getColor(),
-            width: 3.0,
-          ),
+    return Card(
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+        side: BorderSide(
+          color: getColor(),
+          width: 3.0,
         ),
-        elevation: 5,
-        margin: EdgeInsets.all(12),
-        child: ListTile(
-          isThreeLine: true,
-          leading: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              buildDateInfo(),
-              VerticalDivider(
-                color: getColor(),
-                width: 25,
-                thickness: 5,
-              ),
-            ],
-          ),
-          title: Text(
-            provenance,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
+      ),
+      elevation: 5,
+      margin: EdgeInsets.all(12),
+      child: ListTile(
+        isThreeLine: true,
+        leading: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            buildDateInfo(),
+            VerticalDivider(
+              color: Colors.grey,
+              width: 25,
+              thickness: 2,
             ),
-          ),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("${infos.nombreMeubles} meuble(s)"),
-              SizedBox(
-                width: 5,
-              ),
-              Text("${infos.poidsTotal} kg")
-            ],
-          ),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => PageFicheDetails(
-                  fiche: ficheTracabilite,
-                  provenance: provenance,
-                  infos: infos,
-                ),
-              ),
-            );
-          },
+          ],
         ),
+        title: Text(
+          provenance,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+        ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("${infos.nombreMeubles} meuble(s)"),
+            SizedBox(
+              width: 5,
+            ),
+            Text("${infos.poidsTotal} kg")
+          ],
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PageFicheDetails(
+                fiche: ficheTracabilite,
+                provenance: provenance,
+                infos: infos,
+              ),
+            ),
+          );
+        },
       ),
     );
   }

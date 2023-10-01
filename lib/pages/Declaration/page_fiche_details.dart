@@ -140,18 +140,58 @@ class PageFicheDetails extends StatelessWidget {
   }
 
   Widget buildPoidsCard() {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(4),
-      ),
-      color: getColor(),
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      child: Center(
-        child: Text(
-          "${infos.poidsTotal} kg",
-          style: TextStyle(fontSize: 24, color: Colors.white),
+    return Row(
+      children: <Widget>[
+        Expanded(
+          flex: 1,
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(4),
+            ),
+            color: getColor(),
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  child: Center(
+                    child: Text(
+                      "${infos.poidsTotal} kg",
+                      style: TextStyle(fontSize: 24, color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
-      ),
+        Container(width: 2),
+        Expanded(
+          flex: 1,
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(4),
+            ),
+            color: getColor(),
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  child: Center(
+                    child: Text(
+                      "${infos.poidsTotal / 1000} t",
+                      style: TextStyle(fontSize: 24, color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -200,17 +240,11 @@ class PageFicheDetails extends StatelessWidget {
         children: [
           buildProvenanceCard(),
           IntrinsicHeight(
-            child: Expanded(
-              flex: 2,
-              child: buildMeublesCard(),
-            ),
+            child: buildMeublesCard(),
           ),
-          SizedBox(width: 2),
-          Expanded(
-            flex: 1,
-            child: buildPoidsCard(),
-          ),
-          buildRamasseAssocieeCard(), // Retourne la card "Ramasse associée" si la provenance est "Collecte à domicile"
+          SizedBox(height: 2),
+          buildPoidsCard(),
+          buildRamasseAssocieeCard(),
         ],
       ),
     );
