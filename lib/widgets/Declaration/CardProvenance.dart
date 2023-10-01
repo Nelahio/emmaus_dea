@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/FicheTracabilite.dart';
-import '../../pages/page_fiches.dart';
+import '../../pages/Declaration/page_fiches.dart';
 
 class CardProvenance extends StatefulWidget {
   final Provenance provenance;

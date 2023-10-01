@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:provider/provider.dart';
 
-import '../class/api/FicheTracabiliteService.dart';
-import '../widgets/Declaration/CardProvenance.dart';
+import '../../class/api/FicheTracabiliteService.dart';
+import '../../widgets/Declaration/CardProvenance.dart';
 
 class PageDeclaration extends StatefulWidget {
   const PageDeclaration({Key? key}) : super(key: key);
@@ -60,6 +60,8 @@ class _PageDeclarationState extends State<PageDeclaration>
         context
             .read<FicheTracabiliteModel>()
             .updateFiches(provenanceId, listeFiches);
+        // Informez les widgets écoutants que les données ont changé
+        context.read<FicheTracabiliteModel>().notifyListeners();
       }
     } catch (error) {
       print(error);

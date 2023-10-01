@@ -1,4 +1,4 @@
-import 'package:emmaus_dea/pages/page_declaration.dart';
+import 'package:emmaus_dea/pages/Declaration/page_declaration.dart';
 import 'package:emmaus_dea/pages/page_livraison.dart';
 import 'package:emmaus_dea/pages/page_ramasse.dart';
 import 'package:emmaus_dea/pages/page_statistiques.dart';

@@ -1,5 +1,5 @@
 import 'package:emmaus_dea/class/helper.dart';
-import 'package:emmaus_dea/pages/page_fiche_details.dart';
+import 'package:emmaus_dea/pages/Declaration/page_fiche_details.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

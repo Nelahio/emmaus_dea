@@ -2,7 +2,7 @@ import 'package:emmaus_dea/widgets/Declaration/CardFiche.dart';
 import 'package:emmaus_dea/widgets/HomeAppBar.dart';
 import 'package:flutter/material.dart';
 
-import '../models/FicheTracabilite.dart';
+import '../../models/FicheTracabilite.dart';
 
 class PageFiches extends StatefulWidget {
   final String provenance;

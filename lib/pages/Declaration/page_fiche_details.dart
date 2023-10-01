@@ -4,7 +4,7 @@ import 'package:emmaus_dea/widgets/Declaration/CardFiche.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../widgets/HomeAppBar.dart';
+import '../../widgets/HomeAppBar.dart';
 
 class PageFicheDetails extends StatelessWidget {
   final FicheTracabilite fiche;
