@@ -18,8 +18,8 @@ class _PageHomeState extends State<PageHome> {
   int _selectedIndex = 0;
   List<Widget> _widgets = <Widget>[
     PageDeclaration(),
-    PageLivraison(),
     PageRamasse(),
+    PageLivraison(),
     PageStatistiques(),
   ];
   void _onItemTapped(int index) {
@@ -43,14 +43,14 @@ class _PageHomeState extends State<PageHome> {
             tooltip: "Déclarations",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.attach_money_rounded),
-            label: "Livraisons",
-            tooltip: "Livraisons",
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.local_shipping_rounded),
             label: "Ramasses",
             tooltip: "Ramasses",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.attach_money_rounded),
+            label: "Livraisons",
+            tooltip: "Livraisons",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.insert_chart_outlined_rounded),
@@ -63,7 +63,7 @@ class _PageHomeState extends State<PageHome> {
         onTap: _onItemTapped,
         showUnselectedLabels: true,
         type: BottomNavigationBarType.fixed,
-        // backgroundColor: ,
+        // useLegacyColorScheme: true,
       ),
     );
   }
